@@ -7,6 +7,9 @@ import IconWhatsapp from "@/assets/icons/IconWhatsapp.svg";
 import IconFacebook from "@/assets/icons/IconFacebook.svg";
 import IconTelegram from "@/assets/icons/IconTelegram.svg";
 import IconPinterest from "@/assets/icons/IconPinterest.svg";
+import IconQQ from "@/assets/icons/IconQQ.svg";
+import IconWechat from "@/assets/icons/IconWechat.svg";
+import IconZhihu from "@/assets/icons/IconZhihu.svg";
 import { SITE } from "@/config";
 
 interface Social {
@@ -19,27 +22,33 @@ interface Social {
 export const SOCIALS: Social[] = [
   {
     name: "GitHub",
-    href: "https://github.com/satnaing/astro-paper",
+    href: "https://github.com/Clare-67",
     linkTitle: `${SITE.title} on GitHub`,
     icon: IconGitHub,
   },
   {
-    name: "X",
-    href: "https://x.com/username",
-    linkTitle: `${SITE.title} on X`,
-    icon: IconBrandX,
-  },
-  {
-    name: "LinkedIn",
-    href: "https://www.linkedin.com/in/username/",
-    linkTitle: `${SITE.title} on LinkedIn`,
-    icon: IconLinkedin,
-  },
-  {
     name: "Mail",
-    href: "mailto:yourmail@gmail.com",
+    href: "mailto:lzjsglj0126@gmail.com",
     linkTitle: `Send an email to ${SITE.title}`,
     icon: IconMail,
+  },
+  {
+    name: "QQ",
+    href: "tencent://message/?uin=2423228291&Site=Clare's Blog&Menu=yes",
+    linkTitle: `${SITE.title} on QQ`,
+    icon: IconQQ,
+  },
+  {
+    name: "WeChat",
+    href: "your-wechat-link-or-image-path",
+    linkTitle: `${SITE.title} on WeChat`,
+    icon: IconWechat,
+  },
+  {
+    name: "Zhihu",
+    href: "https://www.zhihu.com/people/mixing-33",
+    linkTitle: `${SITE.title} on Zhihu`,
+    icon: IconZhihu,
   },
 ] as const;
 
