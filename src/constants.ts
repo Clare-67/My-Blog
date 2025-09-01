@@ -34,13 +34,13 @@ export const SOCIALS: Social[] = [
   },
   {
     name: "QQ",
-    href: "tencent://message/?uin=2423228291&Site=Clare's Blog&Menu=yes",
+    href: "/qq-qrcode.png",
     linkTitle: `${SITE.title} on QQ`,
     icon: IconQQ,
   },
   {
     name: "WeChat",
-    href: "your-wechat-link-or-image-path",
+    href: "/wechat-qrcode.png",
     linkTitle: `${SITE.title} on WeChat`,
     icon: IconWechat,
   },
