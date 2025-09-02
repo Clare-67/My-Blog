@@ -7,6 +7,10 @@ import { SITE } from "@/config";
 const posts = await getCollection("blog");
 const tags = getUniqueTags(posts);
 
+const uniqueYears = [
+  ...new Set(posts.map(post => post.data.pubDatetime.getFullYear())),
+];
+
 const { author } = SITE;
 ---
 
@@ -39,18 +43,7 @@ const { author } = SITE;
         <div>
           <a href="/archives" class="block">
             <div class="text-xl font-bold">
-              {
-                Object.keys(
-                  posts.reduce((acc, post) => {
-                    const year = post.data.pubDatetime.getFullYear();
-                    if (!acc[year]) {
-                      acc[year] = 0;
-                    }
-                    acc[year]!++;
-                    return acc;
-                  }, {} as Record<string, number>)
-                ).length
-              }
+              {uniqueYears.length}
             </div>
             <div class="text-xs">时间轴</div>
           </a>
