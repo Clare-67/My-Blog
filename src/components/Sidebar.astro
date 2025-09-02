@@ -1,0 +1,68 @@
+---
+import { getCollection } from "astro:content";
+import Socials from "@/components/Socials.astro";
+import getUniqueTags from "@/utils/getUniqueTags";
+import getSortedPosts from "@/utils/getSortedPosts";
+import { getPath } from "@/utils/getPath";
+import { SITE } from "@/config";
+
+const posts = await getCollection("blog");
+const sortedPosts = getSortedPosts(posts);
+const tags = getUniqueTags(posts);
+
+const { author } = SITE;
+---
+
+<div class="w-full">
+  <div class="sticky top-8">
+    <div class="rounded-lg border border-border bg-background p-6 text-center">
+      <!-- Profile Section -->
+      <img
+        class="mx-auto mb-4 size-24 rounded-full border-2 border-border"
+        src="/favicon.svg"
+        alt={author}
+      />
+      <h2 class="text-2xl font-semibold">{author}</h2>
+      <p class="mt-2 text-sm text-foreground/80">
+        Hello!
+      </p>
+
+      <hr class="my-6 border-dashed" />
+
+      <!-- Stats Section -->
+      <div class="grid grid-cols-3 gap-4">
+        <div>
+          <div class="text-xl font-bold">{posts.length}</div>
+          <div class="text-xs">文章</div>
+        </div>
+        <div>
+          <div class="text-xl font-bold">{tags.length}</div>
+          <div class="text-xs">标签</div>
+        </div>
+        <div>
+          <a href="/archives" class="block">
+            <div class="text-xl font-bold">
+              {
+                Object.keys(
+                  posts.reduce((acc, post) => {
+                    const year = post.data.pubDatetime.getFullYear();
+                    acc[year] = true;
+                    return acc;
+                  }, {})
+                ).length
+              }
+            </div>
+            <div class="text-xs">时间轴</div>
+          </a>
+        </div>
+      </div>
+
+      <hr class="my-6 border-dashed" />
+
+      <!-- Socials Section -->
+      <div class="flex justify-center">
+        <Socials centered />
+      </div>
+    </div>
+  </div>
+</div>
