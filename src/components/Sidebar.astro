@@ -2,12 +2,9 @@
 import { getCollection } from "astro:content";
 import Socials from "@/components/Socials.astro";
 import getUniqueTags from "@/utils/getUniqueTags";
-import getSortedPosts from "@/utils/getSortedPosts";
-import { getPath } from "@/utils/getPath";
 import { SITE } from "@/config";
 
 const posts = await getCollection("blog");
-const sortedPosts = getSortedPosts(posts);
 const tags = getUniqueTags(posts);
 
 const { author } = SITE;
@@ -44,7 +41,7 @@ const { author } = SITE;
             <div class="text-xl font-bold">
               {
                 Object.keys(
-                  posts.reduce((acc, post) => {
+                  posts.reduce((acc: Record<number, boolean>, post) => {
                     const year = post.data.pubDatetime.getFullYear();
                     acc[year] = true;
                     return acc;
