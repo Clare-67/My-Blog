@@ -2,8 +2,8 @@
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
-import Main from "@/layouts/Main.astro";
 import Sidebar from "@/components/Sidebar.astro";
+
 ---
 
 <Layout>
@@ -13,8 +13,15 @@ import Sidebar from "@/components/Sidebar.astro";
     class="mx-auto grid max-w-app grid-cols-1 gap-x-0 px-4 pb-8 lg:grid-cols-12"
   >
     <div class="lg:col-span-9 lg:pr-8">
-      <h1 class="mb-8 text-3xl font-semibold">Search</h1>
-      <div id="search"></div>
+      <h1 class="mb-8 text-3xl font-semibold">关于</h1>
+      <div class="prose">
+        <p>
+          你好，我是 Clare，一名计算机科学专业的学生。我热衷于探索新技术，并乐于通过博客分享我的学习心得和实践经验。
+        </p>
+        <p>
+          这个博客是我记录成长、分享知识的地方。希望我的文章能对你有所帮助，也欢迎随时与我交流！
+        </p>
+      </div>
     </div>
     <div class="lg:col-span-3">
       <Sidebar />

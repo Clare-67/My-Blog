@@ -1,24 +1,32 @@
 ---
-import { getCollection } from "astro:content";
-import Main from "@/layouts/Main.astro";
 import Layout from "@/layouts/Layout.astro";
-import Tag from "@/components/Tag.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
+import Tag from "@/components/Tag.astro";
+import Sidebar from "@/components/Sidebar.astro";
 import getUniqueTags from "@/utils/getUniqueTags";
-import { SITE } from "@/config";
+import { getCollection } from "astro:content";
 
 const posts = await getCollection("blog");
 
-let tags = getUniqueTags(posts);
+const tags = getUniqueTags(posts);
 ---
 
-<Layout title={`标签 | ${SITE.title}`}>
+<Layout>
   <Header />
-  <Main pageTitle="标签">
-    <ul>
-      {tags.map(({ tag, tagName }) => <Tag {tag} {tagName} size="lg" />)}
-    </ul>
-  </Main>
+  <main
+    id="main-content"
+    class="mx-auto grid max-w-app grid-cols-1 gap-x-0 px-4 pb-8 lg:grid-cols-12"
+  >
+    <div class="lg:col-span-9 lg:pr-8">
+      <h1 class="mb-8 text-3xl font-semibold">标签</h1>
+      <ul class="flex flex-wrap">
+        {tags.map(({ tag, tagName }) => <Tag {tag} {tagName} size="lg" />)}
+      </ul>
+    </div>
+    <div class="lg:col-span-3">
+      <Sidebar />
+    </div>
+  </main>
   <Footer />
 </Layout>

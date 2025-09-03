@@ -19,12 +19,12 @@ const sortedPosts = getSortedPosts(posts);
     id="main-content"
     class="mx-auto grid max-w-app grid-cols-1 gap-x-0 px-4 pb-8 lg:grid-cols-12"
   >
-    <div class="lg:col-span-8 lg:pr-8">
+    <div class="lg:col-span-9 lg:pr-8">
       <ul class="list-none pl-0">
         {sortedPosts.map(data => <Card {...data} />)}
       </ul>
     </div>
-    <div class="lg:col-span-4">
+    <div class="lg:col-span-3">
       <Sidebar />
     </div>
   </main>

@@ -1,83 +1,68 @@
 ---
 import { getCollection } from "astro:content";
-import Main from "@/layouts/Main.astro";
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
-import Card from "@/components/Card.astro";
-import getPostsByGroupCondition from "@/utils/getPostsByGroupCondition";
+import Sidebar from "@/components/Sidebar.astro";
 import { SITE } from "@/config";
+import getSortedPosts from "@/utils/getSortedPosts";
+import { getPath } from "@/utils/getPath";
 
-// Redirect to 404 page if `showArchives` config is false
-if (!SITE.showArchives) {
-  return Astro.redirect("/404");
-}
+const posts = await getCollection("blog");
+const sortedPosts = getSortedPosts(posts);
 
-const posts = await getCollection("blog", ({ data }) => !data.draft);
-
-const months = [
-  "一月",
-  "二月",
-  "三月",
-  "四月",
-  "五月",
-  "六月",
-  "七月",
-  "八月",
-  "九月",
-  "十月",
-  "十一月",
-  "十二月",
-];
+const postResult = sortedPosts.reduce((acc, post) => {
+  const year = post.data.pubDatetime.getFullYear();
+  if (!acc[year]) {
+    acc[year] = [];
+  }
+  acc[year].push(post);
+  return acc;
+}, {} as Record<number, typeof posts>);
 ---
 
-<Layout title={`归档 | ${SITE.title}`}>
+<Layout>
   <Header />
-  <Main pageTitle="归档" pageDesc="我发布的所有文章的归档。">
-    {
-      Object.entries(
-        getPostsByGroupCondition(posts, post =>
-          post.data.pubDatetime.getFullYear()
-        )
-      )
-        .sort(([yearA], [yearB]) => Number(yearB) - Number(yearA))
-        .map(([year, yearGroup]) => (
-          <div>
-            <span class="text-2xl font-bold">{year}</span>
-            <sup class="text-sm">{yearGroup.length}</sup>
-            {Object.entries(
-              getPostsByGroupCondition(
-                yearGroup,
-                post => post.data.pubDatetime.getMonth() + 1
-              )
-            )
-              .sort(([monthA], [monthB]) => Number(monthB) - Number(monthA))
-              .map(([month, monthGroup]) => (
-                <div class="flex flex-col sm:flex-row">
-                  <div class="mt-6 min-w-36 text-lg sm:my-6">
-                    <span class="font-bold">{months[Number(month) - 1]}</span>
-                    <sup class="text-xs">{monthGroup.length}</sup>
-                  </div>
-                  <ul>
-                    {monthGroup
-                      .sort(
-                        (a, b) =>
-                          Math.floor(
-                            new Date(b.data.pubDatetime).getTime() / 1000
-                          ) -
-                          Math.floor(
-                            new Date(a.data.pubDatetime).getTime() / 1000
-                          )
-                      )
-                      .map(data => (
-                        <Card {...data} />
-                      ))}
-                  </ul>
-                </div>
-              ))}
-          </div>
-        ))
-    }
-  </Main>
+  <main
+    id="main-content"
+    class="mx-auto grid max-w-app grid-cols-1 gap-x-0 px-4 pb-8 lg:grid-cols-12"
+  >
+    <div class="lg:col-span-9 lg:pr-8">
+      <h1 class="mb-8 text-3xl font-semibold">归档</h1>
+      <div class="prose">
+        {
+          Object.keys(postResult)
+            .sort((a, b) => Number(b) - Number(a))
+            .map(year => (
+              <>
+                <h2 class="year">{year}</h2>
+                <ul>
+                  {postResult[year].map(post => (
+                    <li>
+                      <a href={getPath(post.id, post.filePath)}>
+                        {post.data.title}
+                      </a>
+                      &nbsp;&nbsp;&nbsp;
+                      <span class="date">
+                        {new Date(post.data.pubDatetime).toLocaleDateString(
+                          "zh-CN",
+                          {
+                            month: "2-digit",
+                            day: "2-digit",
+                          }
+                        )}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            ))
+        }
+      </div>
+    </div>
+    <div class="lg:col-span-3">
+      <Sidebar />
+    </div>
+  </main>
   <Footer />
 </Layout>

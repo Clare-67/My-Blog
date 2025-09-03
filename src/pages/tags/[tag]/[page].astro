@@ -1,0 +1,57 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import Card from "@/components/Card.astro";
+import Sidebar from "@/components/Sidebar.astro";
+import Pagination from "@/components/Pagination.astro";
+import getSortedPosts from "@/utils/getSortedPosts";
+import getUniqueTags from "@/utils/getUniqueTags";
+import { SITE } from "@/config";
+import { slugifyStr } from "@/utils/slugify";
+import type { GetStaticPathsOptions, Page } from "astro";
+import type { CollectionEntry } from "astro:content";
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+  const posts = await getCollection("blog");
+  const tags = getUniqueTags(posts);
+
+  return tags.flatMap(({ tag }) => {
+    const tagPosts = posts.filter(post =>
+      post.data.tags.map(t => slugifyStr(t)).includes(tag)
+    );
+    return paginate(tagPosts, {
+      params: { tag },
+      pageSize: SITE.postPerPage,
+    });
+  });
+}
+
+interface Props {
+  page: Page<CollectionEntry<"blog">>;
+}
+
+const { page } = Astro.props;
+const { tag } = Astro.params;
+---
+
+<Layout>
+  <Header />
+  <main
+    id="main-content"
+    class="mx-auto grid max-w-app grid-cols-1 gap-x-0 px-4 pb-8 lg:grid-cols-12"
+  >
+    <div class="lg:col-span-9 lg:pr-8">
+      <h1 class="mb-8 text-3xl font-semibold">标签: {tag}</h1>
+      <ul>
+        {page.data.map(data => <Card {...data} />)}
+      </ul>
+      <Pagination page={page} />
+    </div>
+    <div class="lg:col-span-3">
+      <Sidebar />
+    </div>
+  </main>
+  <Footer />
+</Layout>
